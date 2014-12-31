@@ -50,6 +50,8 @@
 #include "core.h"
 #include "debug.h"
 
+#include "PurpleUI.h"
+
 const char* const IMAccountValidatorApp::ServiceName = _T("com.palm.imaccountvalidator");
 MojLogger IMAccountValidatorApp::s_log(_T("imaccountvalidator"));
 
@@ -177,6 +179,8 @@ static void null_ui_init(void)
        * just initialize the UI for conversations.
        */
       purple_conversations_set_ui_ops(&null_conv_uiops);
+      purple_request_set_ui_ops(Purple::getRequestOps());
+      purple_notify_set_ui_ops(Purple::getNotifyOps());
 }
 
 static PurpleCoreUiOps null_core_uiops =
@@ -195,6 +199,21 @@ static PurpleCoreUiOps null_core_uiops =
 
 int main(int argc, char** argv)
 {
+    purple_debug_set_enabled(TRUE);
+
+    GList* list = purple_plugins_get_all();
+
+    if (!list)
+        purple_debug_error("main", "No plugins found!");
+
+    for (GList* elem = list; elem; elem = elem->next)
+    {
+        const gchar* str = purple_plugin_get_name(
+                                static_cast<PurplePlugin*> (elem->data)
+                                );
+        purple_debug_error("main", "%s\n", str);
+    }
+
 	IMAccountValidatorApp app;
 	app.initializeLibPurple();
 	int mainResult = app.main(argc, argv);
@@ -202,6 +221,8 @@ int main(int argc, char** argv)
 }
 
 IMAccountValidatorApp::IMAccountValidatorApp()
+    // Allow public methods
+    : m_service(true, &m_dispatcher)
 {
 }
 
@@ -211,6 +232,9 @@ MojErr IMAccountValidatorApp::open()
 
 	MojErr err = Base::open();
 	MojErrCheck(err);
+
+    // Start 3 threads
+    m_dispatcher.start(3);
 
 	// open service
 	err = m_service.open(ServiceName);
@@ -238,7 +262,11 @@ MojErr IMAccountValidatorApp::close()
 	MojLogNotice(s_log, _T("%s stopping..."), name().data());
 
 	MojErr err = MojErrNone;
-	MojErr errClose = m_service.close();
+	MojErr errClose = m_dispatcher.stop();
+	MojErrAccumulate(err, errClose);
+    errClose = m_dispatcher.wait();
+	MojErrAccumulate(err, errClose);
+    m_service.close();
 	MojErrAccumulate(err, errClose);
 	errClose = Base::close();
 	MojErrAccumulate(err, errClose);
@@ -256,6 +284,8 @@ MojErr IMAccountValidatorApp::initializeLibPurple() {
 	 * of zombie subprocesses marching around.
 	 */
 	signal(SIGCHLD, SIG_IGN);
+
+    purple_util_set_user_dir("/var/preferences/com.palm.imaccountvalidator");
 
 	/* turn on debugging. Turn off to keep the noise to a minimum. */
 	purple_debug_set_enabled(TRUE);
