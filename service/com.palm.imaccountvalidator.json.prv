@@ -1,6 +1,6 @@
 {
 	"role": {
-		"exeName":"/usr/bin/imaccountvalidator",
+		"exeName":"/usr/sbin/imaccountvalidator",
 		"type":"regular",
 		"allowedNames":["com.palm.imaccountvalidator"]
 	},
