@@ -90,7 +90,7 @@ private:
 
 	// account we are validating
 	PurpleAccount* m_account;
-    bool running_;
+	bool running_;
 
 	// service message to reply back to
 	MojRefCountedPtr <MojServiceMessage> m_serviceMsg;
@@ -98,9 +98,9 @@ private:
 	MojString m_password;
 	MojString m_mojoUsername;
 
-    MojErr getOptions(MojServiceMessage* serviceMsg, const MojObject payload);
-    MojErr getEvent(MojServiceMessage* serviceMsg, const MojObject payload);
-    MojErr answerUIEvent(MojServiceMessage* serviceMsg, const MojObject payload);
+	MojErr getOptions(MojServiceMessage* serviceMsg, const MojObject payload);
+	MojErr getEvent(MojServiceMessage* serviceMsg, const MojObject payload);
+	MojErr answerUIEvent(MojServiceMessage* serviceMsg, const MojObject payload);
 	MojErr validateAccount(MojServiceMessage* serviceMsg, const MojObject payload);
 	MojErr logout(MojServiceMessage* serviceMsg, const MojObject payload);
 	MojErr getMojoFriendlyUsername(const char* serviceName, const char* username);

@@ -32,8 +32,8 @@
 const IMAccountValidatorHandler::Method IMAccountValidatorHandler::s_methods[] = {
 	{_T("validateAccount"), (Callback) &IMAccountValidatorHandler::validateAccount},
 	{_T("getEvent"), (Callback) &IMAccountValidatorHandler::getEvent},
-    {_T("getOptions"), (Callback) &IMAccountValidatorHandler::getOptions},
-    {_T("answerEvent"), (Callback) &IMAccountValidatorHandler::answerUIEvent},
+	{_T("getOptions"), (Callback) &IMAccountValidatorHandler::getOptions},
+	{_T("answerEvent"), (Callback) &IMAccountValidatorHandler::answerUIEvent},
 	{_T("logout"), (Callback) &IMAccountValidatorHandler::logout},
 	{NULL, NULL} };
 
@@ -190,46 +190,45 @@ MojErr IMAccountValidatorHandler::validateAccount(MojServiceMessage* serviceMsg,
 
 	// get the username, password, and config from the input payload
 	MojString username;
-    MojString prpl;
-    MojObject config;
+	MojString prpl;
+	MojObject config;
 
-    try
-    {
-        username = Util::get(payload, "username");
-        m_password = Util::get(payload, "password");
-        prpl = Util::get(payload, "prpl");
+	try
+	{
+		username = Util::get(payload, "username");
+		m_password = Util::get(payload, "password");
+		prpl = Util::get(payload, "prpl");
 
-        payload.get("config", config);
-        m_account = Util::createPurpleAccount(username, prpl, config);
-    }
+		payload.get("config", config);
+		m_account = Util::createPurpleAccount(username, prpl, config);
+	}
     catch(Util::MojoException const& exc)
     {
-        MojString error;
-        error.assign(exc.what().c_str());
-        serviceMsg->replyError(MojErrInvalidArg, error);
-        m_clientApp->shutdown();
-        return MojErrInvalidArg;
-    }
+		MojString error;
+		error.assign(exc.what().c_str());
+		serviceMsg->replyError(MojErrInvalidArg, error);
+		m_clientApp->shutdown();
+		return MojErrInvalidArg;
+	}
 
-    running_ = true;
-    // TODO: Register UI callback
-    // Enable subscription
-//    serviceMessage.notifyCancel(slot_);
+	running_ = true;
+	// TODO: Register UI callback
+	// Enable subscription
+	// serviceMessage.notifyCancel(slot_);
 
-    // We should enable answerUIEvent in uiCallback (so we don't need the id
-    // stuff)
-//    Purple::registerUICallback(boost::bind(IMAccountValidatorHandler::uiCallback, this));
+	// We should enable answerUIEvent in uiCallback (so we don't need the id stuff)
+	// Purple::registerUICallback(boost::bind(IMAccountValidatorHandler::uiCallback, this));
 
 	// Input is OK - validate the account
 	MojLogInfo(IMAccountValidatorApp::s_log, "validateAccount: Logging in...username: %s, password: ****removed****", username.data());
 
-    purple_account_set_password(m_account, m_password.data());
-    /* It's necessary to enable the account first. */
-    purple_account_set_enabled(m_account, UI_ID, TRUE);
+	purple_account_set_password(m_account, m_password.data());
+	/* It's necessary to enable the account first. */
+	purple_account_set_enabled(m_account, UI_ID, TRUE);
 
-   /* Now, to activate the account with status=invisible so the user doesn't briefly show as online. */
-    status = purple_savedstatus_new(NULL, PURPLE_STATUS_INVISIBLE);
-    purple_savedstatus_activate(status);
+	/* Now, to activate the account with status=invisible so the user doesn't briefly show as online. */
+	status = purple_savedstatus_new(NULL, PURPLE_STATUS_INVISIBLE);
+	purple_savedstatus_activate(status);
 
 	return MojErrNone;
 }
@@ -270,7 +269,7 @@ void IMAccountValidatorHandler::returnValidateSuccess()
 	//	reply.put("username", m_mojoUsername);
 	//}
 
-    Purple::pushEvent(reply);
+	Purple::pushEvent(reply);
 
 	// Done with password so clear it out
 	m_password.clear();
@@ -305,14 +304,14 @@ void IMAccountValidatorHandler::returnValidateFailed(MojErr err, MojString error
 {
 	MojLogError(IMAccountValidatorApp::s_log, "returnValidateFailed error: %d - %s", err, errorText.data());
 
-    if (running_)
-    {
-        running_ = false;
-        MojObject elem;
-        elem.putInt("errorCode", err);
-        elem.putString("error", errorText);
-        Purple::pushEvent(elem);
-    }
+	if (running_)
+	{
+		running_ = false;
+		MojObject elem;
+		elem.putInt("errorCode", err);
+		elem.putString("error", errorText);
+		Purple::pushEvent(elem);
+	}
 }
 
 void IMAccountValidatorHandler::returnLogoutSuccess()
@@ -383,7 +382,7 @@ void IMAccountValidatorHandler::accountLoggedIn(PurpleConnection* gc, gpointer a
 
 	IMAccountValidatorHandler *validator = (IMAccountValidatorHandler*) accountValidator;
 
-    validator->returnValidateSuccess();
+	validator->returnValidateSuccess();
 }
 
 /*

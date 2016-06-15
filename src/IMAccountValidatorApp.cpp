@@ -221,8 +221,8 @@ int main(int argc, char** argv)
 }
 
 IMAccountValidatorApp::IMAccountValidatorApp()
-    // Allow public methods
-    : m_service(true, &m_dispatcher)
+	// Allow public methods
+	: m_service(true, &m_dispatcher)
 {
 }
 
@@ -233,8 +233,8 @@ MojErr IMAccountValidatorApp::open()
 	MojErr err = Base::open();
 	MojErrCheck(err);
 
-    // Start 3 threads
-    m_dispatcher.start(3);
+	// Start 3 threads
+	m_dispatcher.start(3);
 
 	// open service
 	err = m_service.open(ServiceName);
@@ -264,9 +264,9 @@ MojErr IMAccountValidatorApp::close()
 	MojErr err = MojErrNone;
 	MojErr errClose = m_dispatcher.stop();
 	MojErrAccumulate(err, errClose);
-    errClose = m_dispatcher.wait();
+	errClose = m_dispatcher.wait();
 	MojErrAccumulate(err, errClose);
-    m_service.close();
+	m_service.close();
 	MojErrAccumulate(err, errClose);
 	errClose = Base::close();
 	MojErrAccumulate(err, errClose);
@@ -285,7 +285,7 @@ MojErr IMAccountValidatorApp::initializeLibPurple() {
 	 */
 	signal(SIGCHLD, SIG_IGN);
 
-    purple_util_set_user_dir("/var/preferences/com.palm.imaccountvalidator");
+	purple_util_set_user_dir("/var/preferences/com.palm.imaccountvalidator");
 
 	/* turn on debugging. Turn off to keep the noise to a minimum. */
 	purple_debug_set_enabled(TRUE);

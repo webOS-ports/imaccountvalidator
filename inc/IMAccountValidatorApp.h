@@ -46,7 +46,7 @@ private:
 
 	typedef MojReactorApp<MojGmainReactor> Base;
 
-    MojMessageDispatcher m_dispatcher;
+	MojMessageDispatcher m_dispatcher;
 	MojRefCountedPtr<IMAccountValidatorHandler> m_handler;
 	MojLunaService  m_service;
 };
