@@ -1,6 +1,6 @@
 {
     "role": {
-        "exeName":"@WEBOS_INSTALL_SBINDIR@/mediaindexer",
+        "exeName":"@WEBOS_INSTALL_SBINDIR@/imaccountvalidator",
         "type": "regular",
         "allowedNames": ["com.palm.imaccountvalidator"]
     },
