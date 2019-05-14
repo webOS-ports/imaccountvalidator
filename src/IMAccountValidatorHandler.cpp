@@ -67,8 +67,8 @@ MojErr IMAccountValidatorHandler::init(IMAccountValidatorApp* const app)
 	MojLogTrace(IMAccountValidatorApp::s_log);
 	MojLogInfo(IMAccountValidatorApp::s_log, IMVersionString);
 
-    // Add the methods publicly
-	MojErr err = addMethods(s_methods, true);
+    // Add the methods
+	MojErr err = addMethods(s_methods);
 	MojErrCheck(err);
 
 	// set up signed-on, signed-off callback pointers - see LibpurpleAdapter::assignIMLoginState
