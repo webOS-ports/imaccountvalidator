@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.palm.imaccountvalidator
+Exec=@WEBOS_INSTALL_SBINDIR@/imaccountvalidator -c {\"log\":{\"appender\":{\"type\":\"pmlog\"},\"levels\":{\"imaccountvalidator\":\"info\"}}} PalmPre Palm-Pre/1.5
