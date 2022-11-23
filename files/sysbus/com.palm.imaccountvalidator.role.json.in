@@ -1,5 +1,6 @@
 {
     "exeName":"@WEBOS_INSTALL_SBINDIR@/imaccountvalidator",
+    "trustLevel": "oem",
     "type": "regular",
     "allowedNames": ["com.palm.imaccountvalidator"],
     "permissions": [
