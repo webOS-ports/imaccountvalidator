@@ -1,5 +1,5 @@
 {
     "com.palm.imaccountvalidator": [
-        "services"
+        "imaccountvalidator.operation"
     ]
 }
